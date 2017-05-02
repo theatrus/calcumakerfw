@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 GCC_VERSION=6-2017-q1-update
 GMP_VERSION=6.1.2
@@ -18,17 +19,17 @@ EXTLIB=$PWD/extlib
 
 pushd .
 cd buildtmp
-wget https://gmplib.org/download/gmp/gmp-${GMP_VERSION}.tar.gz
+wget https://gmplib.org/download/gmp/gmp-${GMP_VERSION}.tar.bz2
 wget http://www.mpfr.org/mpfr-current/mpfr-${MPFR_VERSION}.tar.gz
 wget http://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz
 wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/6_1-2017q1/gcc-arm-none-eabi-${GCC_VERSION}-linux.tar.bz2
 
 tar xvjf gcc-arm-none-eabi-${GCC_VERSION}-linux.tar.bz2
-tar xvzf gmp-${GMP_VERSION}.tar.gz
+tar xvjf gmp-${GMP_VERSION}.tar.bz2
 tar xvzf mpfr-${MPFR_VERSION}.tar.gz
 tar xvzf mpc-${MPC_VERSION}.tar.gz
 
-export PATH=$PATH:$PWD/gcc-arm-none-eabi-${GCC_VERSION}
+export PATH=$PATH:$PWD/gcc-arm-none-eabi-${GCC_VERSION}/bin
 
 pushd .
 cd gmp-${GMP_VERSION}
