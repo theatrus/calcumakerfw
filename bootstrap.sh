@@ -4,6 +4,16 @@ set -e
 set -x
 
 GCC_VERSION=6-2017-q1-update
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    GCC_OS="linux"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    GCC_OS="mac"
+else
+  echo "Don't know which GCC package to use - bailing"
+  exit 1
+fi
+
 GMP_VERSION=6.1.2
 MPFR_VERSION=3.1.5
 MPC_VERSION=1.0.3
@@ -39,13 +49,13 @@ if [ ! -f mpc-${MPC_VERSION}.tar.gz ]; then
     wget http://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz
 fi
 
-if [ ! -f gcc-arm-none-eabi-${GCC_VERSION}-linux.tar.bz2 ]; then
-    wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/6_1-2017q1/gcc-arm-none-eabi-${GCC_VERSION}-linux.tar.bz2
+if [ ! -f gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2 ]; then
+    wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/6_1-2017q1/gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2
 fi
 
 if [ ! -d gcc-arm-none-eabi-${GCC_VERSION} ]; then
     rm -rf gcc-arm-none-eabi-${GCC_VERSION}
-    tar xjf gcc-arm-none-eabi-${GCC_VERSION}-linux.tar.bz2
+    tar xjf gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2
 fi
 
 tar xzf release-1.8.0.tar.gz
