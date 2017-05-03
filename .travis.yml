@@ -1,5 +1,6 @@
 language: c
-sudo: true
+sudo: required
+dist: trusty
 
 before_script: sudo apt-get install -y wget
 
