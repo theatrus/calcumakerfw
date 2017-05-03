@@ -8,18 +8,25 @@ GMP_VERSION=6.1.2
 MPFR_VERSION=3.1.5
 MPC_VERSION=1.0.3
 
-export CC=arm-none-eabi-gcc
-export CFLAGS="-nostartfiles --specs=nosys.specs -mcpu=cortex-m4 -Os -mfloat-abi=hard -mfpu=fpv4-sp-d16"
-
 rm -rf extlib
+rm -rf hostlib
 
 mkdir -p buildtmp
 mkdir -p extlib
+mkdir -p hostlib
+mkdir -p hostlib/lib
+mkdir -p hostlib/include
 
 EXTLIB=$PWD/extlib
+HOSTLIB=$PWD/hostlib
 
 pushd .
 cd buildtmp
+
+if [ ! -f release-1.8.0.tar.gz ]; then
+    wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
+fi
+
 if [ ! -f gmp-${GMP_VERSION}.tar.bz2 ]; then
     wget https://gmplib.org/download/gmp/gmp-${GMP_VERSION}.tar.bz2
 fi
@@ -41,14 +48,26 @@ if [ ! -d gcc-arm-none-eabi-${GCC_VERSION} ]; then
     tar xjf gcc-arm-none-eabi-${GCC_VERSION}-linux.tar.bz2
 fi
 
+tar xzf release-1.8.0.tar.gz
 rm -rf gmp-${GMP_VERSION}
 tar xjf gmp-${GMP_VERSION}.tar.bz2
 rm -rf mpfr-${MPFR_VERSIO}
 tar xzf mpfr-${MPFR_VERSION}.tar.gz
 tar xzf mpc-${MPC_VERSION}.tar.gz
 
-export PATH=$PATH:$PWD/gcc-arm-none-eabi-${GCC_VERSION}/bin
+pushd .
+cd googletest-release-1.8.0/googletest
+GTEST_DIR=$PWD
+g++ -isystem ${GTEST_DIR}/include -I${GTEST_DIR} \
+    -pthread -c ${GTEST_DIR}/src/gtest-all.cc
+ar -rv ${HOSTLIB}/lib/libgtest.a gtest-all.o
+cp -r ${GTEST_DIR}/include ${HOSTLIB}
+popd
 
+
+export PATH=$PATH:$PWD/gcc-arm-none-eabi-${GCC_VERSION}/bin
+export CC=arm-none-eabi-gcc
+export CFLAGS="-nostartfiles --specs=nosys.specs -mcpu=cortex-m4 -Os -mfloat-abi=hard -mfpu=fpv4-sp-d16"
 pushd .
 cd gmp-${GMP_VERSION}
 ./configure  --host=arm-none-eabi --disable-assembly --prefix=$EXTLIB --disable-shared
