@@ -77,7 +77,7 @@ popd
 
 export PATH=$PATH:$PWD/gcc-arm-none-eabi-${GCC_VERSION}/bin
 export CC=arm-none-eabi-gcc
-export CFLAGS="-nostartfiles --specs=nosys.specs -mcpu=cortex-m4 -Os -mfloat-abi=hard -mfpu=fpv4-sp-d16"
+export CFLAGS="-nostartfiles -ffunction-sections -fdata-sections --specs=nosys.specs -mcpu=cortex-m4 -Os -mfloat-abi=hard -mfpu=fpv4-sp-d16"
 pushd .
 cd gmp-${GMP_VERSION}
 ./configure  --host=arm-none-eabi --disable-assembly --prefix=$EXTLIB --disable-shared
@@ -91,3 +91,6 @@ cd mpfr-${MPFR_VERSION}
 make -j 4
 make install
 popd
+popd
+
+touch bootstrap-complete
