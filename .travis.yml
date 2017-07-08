@@ -2,6 +2,6 @@ language: c
 sudo: required
 dist: trusty
 
-before_script: sudo apt-get install -y wget libgmp-dev libmpfr-dev
+before_script: sudo apt-get install -y wget libgmp-dev libmpfr-dev m4
 
 script: ./bootstrap.sh

@@ -93,7 +93,6 @@ cd mpfr-${MPFR_VERSION}
 make -j 4
 make install
 popd
-popd
 
 # Revert path
 export PATH=$OLDPATH
