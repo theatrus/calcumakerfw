@@ -1,5 +1,5 @@
-.PHONY: all clean bootstrap
-all: bootstrap
+.PHONY: all clean bootstrap calccore_host
+all: bootstrap calccore_host
 
 bootstrap: bootstrap-complete
 bootstrap-complete: bootstrap.sh
@@ -10,3 +10,6 @@ clean:
 	rm -rf buildtmp
 	rm -rf extlib
 	rm -rf hostlib
+
+calccore_host:
+	$(MAKE) -C calccore TARGET=host
