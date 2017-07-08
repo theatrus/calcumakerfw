@@ -75,6 +75,8 @@ cp -r ${GTEST_DIR}/include ${HOSTLIB}
 popd
 
 
+OLDPATH=$PATH
+
 export PATH=$PATH:$PWD/gcc-arm-none-eabi-${GCC_VERSION}/bin
 export CC=arm-none-eabi-gcc
 export CFLAGS="-nostartfiles -ffunction-sections -fdata-sections --specs=nosys.specs -mcpu=cortex-m4 -Os -mfloat-abi=hard -mfpu=fpv4-sp-d16"
@@ -92,5 +94,33 @@ make -j 4
 make install
 popd
 popd
+
+# Revert path
+export PATH=$OLDPATH
+unset CC
+unset CFLAGS
+
+# Building system packages on hostlib
+rm -rf gmp-${GMP_VERSION}
+tar xjf gmp-${GMP_VERSION}.tar.bz2
+rm -rf mpfr-${MPFR_VERSIO}
+tar xzf mpfr-${MPFR_VERSION}.tar.gz
+tar xzf mpc-${MPC_VERSION}.tar.gz
+
+pushd .
+cd gmp-${GMP_VERSION}
+./configure  --disable-assembly --prefix=$HOSTLIB --disable-shared
+make -j 4
+make install
+popd
+
+pushd .
+cd mpfr-${MPFR_VERSION}
+./configure--disable-assembly --prefix=$HOSTLIB --disable-shared --with-gmp=${HOSTLIB}
+make -j 4
+make install
+popd
+popd
+
 
 touch bootstrap-complete
