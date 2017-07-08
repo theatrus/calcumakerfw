@@ -1,6 +1,7 @@
-.PHONY: all clean
-all: bootstrap-complete
+.PHONY: all clean bootstrap
+all: bootstrap
 
+bootstrap: bootstrap-complete
 bootstrap-complete: bootstrap.sh
 	./bootstrap.sh
 

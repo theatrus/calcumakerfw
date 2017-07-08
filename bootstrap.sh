@@ -58,6 +58,9 @@ if [ ! -d gcc-arm-none-eabi-${GCC_VERSION} ]; then
     tar xjf gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2
 fi
 
+# Copy the compiler down one level for later building
+cp -r gcc-arm-none-eabi-${GCC_VERSION} ../_gcc
+
 tar xzf release-1.8.0.tar.gz
 rm -rf gmp-${GMP_VERSION}
 tar xjf gmp-${GMP_VERSION}.tar.bz2
