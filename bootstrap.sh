@@ -115,7 +115,7 @@ popd
 
 pushd .
 cd mpfr-${MPFR_VERSION}
-./configure--disable-assembly --prefix=$HOSTLIB --disable-shared --with-gmp=${HOSTLIB}
+./configure --disable-assembly --prefix=$HOSTLIB --disable-shared --with-gmp=${HOSTLIB}
 make -j 4
 make install
 popd
