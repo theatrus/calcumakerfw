@@ -2,3 +2,4 @@ extlib/
 buildtmp/
 hostlib/
 bootstrap-complete
+_gcc/
