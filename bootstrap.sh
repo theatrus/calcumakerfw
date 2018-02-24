@@ -3,7 +3,7 @@
 set -e
 set -x
 
-GCC_VERSION=6-2017-q1-update
+GCC_VERSION=7-2017-q4-major
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     GCC_OS="linux"
@@ -15,7 +15,7 @@ else
 fi
 
 GMP_VERSION=6.1.2
-MPFR_VERSION=3.1.5
+MPFR_VERSION=4.0.1
 MPC_VERSION=1.0.3
 
 rm -rf extlib
@@ -48,9 +48,8 @@ fi
 if [ ! -f mpc-${MPC_VERSION}.tar.gz ]; then
     wget http://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz
 fi
-
 if [ ! -f gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2 ]; then
-    wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/6_1-2017q1/gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2
+    wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2
 fi
 
 if [ ! -d gcc-arm-none-eabi-${GCC_VERSION} ]; then
