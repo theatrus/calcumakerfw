@@ -3,7 +3,8 @@
 set -e
 set -x
 
-GCC_VERSION=7-2017-q4-major
+# https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/RC2.1/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2
+GCC_VERSION=9-2019-q4-major
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     GCC_OS="linux"
@@ -15,7 +16,7 @@ else
 fi
 
 GMP_VERSION=6.1.2
-MPFR_VERSION=4.0.1
+MPFR_VERSION=4.0.2
 MPC_VERSION=1.0.3
 
 rm -rf extlib
@@ -33,10 +34,6 @@ HOSTLIB=$PWD/hostlib
 pushd .
 cd buildtmp
 
-if [ ! -f release-1.8.0.tar.gz ]; then
-    wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
-fi
-
 if [ ! -f gmp-${GMP_VERSION}.tar.bz2 ]; then
     wget https://gmplib.org/download/gmp/gmp-${GMP_VERSION}.tar.bz2
 fi
@@ -49,12 +46,12 @@ if [ ! -f mpc-${MPC_VERSION}.tar.gz ]; then
     wget http://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz
 fi
 if [ ! -f gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2 ]; then
-    wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2
+    wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/RC2.1/gcc-arm-none-eabi-${GCC_VERSION}-x86_64-${GCC_OS}.tar.bz2
 fi
 
 if [ ! -d gcc-arm-none-eabi-${GCC_VERSION} ]; then
     rm -rf gcc-arm-none-eabi-${GCC_VERSION}
-    tar xjf gcc-arm-none-eabi-${GCC_VERSION}-${GCC_OS}.tar.bz2
+    tar xjf gcc-arm-none-eabi-${GCC_VERSION}-x86_64-${GCC_OS}.tar.bz2
 fi
 
 # Copy the compiler down one level for later building
@@ -66,15 +63,6 @@ tar xjf gmp-${GMP_VERSION}.tar.bz2
 rm -rf mpfr-${MPFR_VERSIO}
 tar xzf mpfr-${MPFR_VERSION}.tar.gz
 tar xzf mpc-${MPC_VERSION}.tar.gz
-
-pushd .
-cd googletest-release-1.8.0/googletest
-GTEST_DIR=$PWD
-g++ -isystem ${GTEST_DIR}/include -I${GTEST_DIR} \
-    -pthread -c ${GTEST_DIR}/src/gtest-all.cc
-ar -rv ${HOSTLIB}/lib/libgtest.a gtest-all.o
-cp -r ${GTEST_DIR}/include ${HOSTLIB}
-popd
 
 
 OLDPATH=$PATH
